@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,5 @@ use App\Http\Controllers\EventsController;
 // });
 
 Route::get('/events/all', [EventsController::class, 'index']);
+Route::get('/tags/all', [TagController::class, 'index']);
+Route::get('/categories/all', [CategoryController::class, 'index']);

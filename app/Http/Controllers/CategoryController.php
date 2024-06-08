@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Event;
+use App\Models\Category;
 
-class EventsController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class EventsController extends Controller
     public function index()
     {
         //
-        $events = Event::all();
-        return $events;
+        $categories = Category::all();
+        return $categories;
     }
 
     /**
@@ -31,25 +31,7 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        $start = $request->start_date." ".$request->start_hour;
-        $end = $request->end_date." ".$request->end_hour;
-        $file = $request->file('image');
-        $file_name = 'event_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('public/images', $file_name);
         //
-        Event::create([
-            'courses_id' => $request->course,
-            'categories_id' => $request->category,
-            'tags_id' => $request->tag,
-            'users_id' => $request->user,
-            'title' => $request->title,
-            'start' => $start,
-            'end' => $end,
-            'status' => $request->status,
-            'description' => $request->description,
-            'image' => $file_name,
-            'percentage' => 15,
-        ]);
     }
 
     /**
