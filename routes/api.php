@@ -24,3 +24,6 @@ use App\Http\Controllers\TagController;
 Route::get('/events/all', [EventsController::class, 'index']);
 Route::get('/tags/all', [TagController::class, 'index']);
 Route::get('/categories/all', [CategoryController::class, 'index']);
+
+
+Route::get('/events/detail/{id}', [EventsController::class, 'show']);

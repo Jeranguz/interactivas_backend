@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Event;
+use Carbon\Carbon;
 
 class EventsController extends Controller
 {
@@ -24,6 +24,7 @@ class EventsController extends Controller
     public function create()
     {
         //
+        return view('events.create');
     }
 
     /**
@@ -31,8 +32,8 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        $start = $request->start_date." ".$request->start_hour;
-        $end = $request->end_date." ".$request->end_hour;
+        $start = $request->start_date . " " . $request->start_hour;
+        $end = $request->end_date . " " . $request->end_hour;
         $file = $request->file('image');
         $file_name = 'event_' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('public/images', $file_name);
@@ -57,7 +58,31 @@ class EventsController extends Controller
      */
     public function show(string $id)
     {
+        Carbon::setlocale('es');
         //
+        $event = Event::select(
+            'courses.name as course',
+            'categories.name as category',
+            'tags.name as tag',
+            'events.title',
+            'events.start',
+            'events.end',
+            'events.status',
+            'events.description',
+            'events.image',
+            'events.percentage',
+        )
+            ->join('courses', 'events.courses_id', '=', 'courses.id')
+            ->join('categories', 'events.categories_id', '=', 'categories.id')
+            ->join('tags', 'events.tags_id', '=', 'tags.id')
+            ->where('events.id', $id)
+            ->get();
+        $event[0]->image = 'http://interactivas_backend.test/storage/images/' . $event[0]->image;
+        $date = Carbon::parse($event[0]->start)->isoFormat('dddd, D [de] MMMM [de] YYYY, h:mm A');
+        // $time = Carbon::parse($event->start)->format('h:i A');
+        $event[0]->start = $date;
+
+        return $event;
     }
 
     /**

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Category;
+use App\Models\Tag;
+use App\Models\Course;
+
 class AdminController extends Controller
 {
     /**
@@ -12,6 +16,7 @@ class AdminController extends Controller
     public function index()
     {
         //
+        return view('events.index');
     }
 
     /**
@@ -20,6 +25,10 @@ class AdminController extends Controller
     public function create()
     {
         //
+        $tags = Tag::all();
+        $categories = Category::all();
+        $courses = Course::all();
+        return view('events.create', compact('tags', 'categories', 'courses'));
     }
 
     /**
