@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventsController;
@@ -24,6 +25,9 @@ use App\Http\Controllers\TagController;
 Route::get('/events/all', [EventsController::class, 'index']);
 Route::get('/tags/all', [TagController::class, 'index']);
 Route::get('/categories/all', [CategoryController::class, 'index']);
+Route::get('/courses/all', [CourseController::class, 'allCourses']);
 
 
 Route::get('/events/detail/{id}', [EventsController::class, 'show']);
+
+Route::post('/events/add', [EventsController::class, 'store']);

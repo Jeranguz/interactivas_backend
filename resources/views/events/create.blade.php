@@ -1,4 +1,4 @@
-@extends('events.base')
+@extends('base')
 
 @section('content')
 <div class="flex justify-center">
