@@ -27,6 +27,8 @@ class User extends Authenticatable
         'hours_sleep',
         'semanal_activity',
         'nacionality',
+        'user_types_id',
+        'profile_picture'
     ];
 
     /**

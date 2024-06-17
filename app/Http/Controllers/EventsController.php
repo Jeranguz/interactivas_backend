@@ -51,6 +51,7 @@ class EventsController extends Controller
             'image' => $file_name,
             'percentage' => 15,
         ]);
+        return redirect('http://localhost:5173/PaginaCalendario');
     }
 
     /**

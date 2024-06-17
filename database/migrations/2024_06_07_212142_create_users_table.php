@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->integer('age');
-            $table->integer('hours_sleep');
-            $table->string('semanal_activity');
-            $table->string('nacionality');
+            $table->string('profile_picture')->nullable();
+            $table->integer('age')->nullable();
+            $table->integer('hours_sleep')->nullable();
+            $table->integer('semanal_activity')->nullable();
+            $table->string('nacionality')->nullable();
             $table->foreignId('user_types_id')->constrained();
             $table->timestamps();
-
         });
     }
 
