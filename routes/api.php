@@ -22,8 +22,8 @@ use App\Http\Controllers\TagController;
 //     return $request->user();
 // });
 
-Route::get('/events/all', [EventsController::class, 'index']);
-Route::get('/tags/all', [TagController::class, 'index']);
+Route::get('/events/all', [EventsController::class, 'allEvents']);
+Route::get('/tags/all', [TagController::class, 'allTags']);
 Route::get('/categories/all', [CategoryController::class, 'index']);
 Route::get('/courses/all', [CourseController::class, 'allCourses']);
 
