@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\Tag;
+use App\Models\Course;
+use App\Models\Category;
 use Carbon\Carbon;
 
 class EventsController extends Controller
@@ -12,6 +15,13 @@ class EventsController extends Controller
      * Display a listing of the resource.
      */
     public function index()
+    {
+        //
+        $events = Event::all();
+        return view('events.index', compact('events'));
+    }
+
+    public function allEvents()
     {
         //
         $events = Event::all();
@@ -24,7 +34,10 @@ class EventsController extends Controller
     public function create()
     {
         //
-        return view('events.create');
+        $tags = Tag::all();
+        $categories = Category::all();
+        $courses = Course::all();
+        return view('events.create', compact('tags', 'categories', 'courses'));
     }
 
     /**
@@ -76,13 +89,13 @@ class EventsController extends Controller
             ->join('categories', 'events.categories_id', '=', 'categories.id')
             ->join('tags', 'events.tags_id', '=', 'tags.id')
             ->where('events.id', $id)
-            ->get();
-        $event[0]->image = 'http://interactivas_backend.test/storage/images/' . $event[0]->image;
-        $date = Carbon::parse($event[0]->start)->isoFormat('dddd, D [de] MMMM [de] YYYY, h:mm A');
-        // $time = Carbon::parse($event->start)->format('h:i A');
-        $event[0]->start = $date;
+            ->firstOrFail(); // Aquí usamos firstOrFail() en lugar de get()
 
-        return $event;
+        $event->image = 'http://interactivas_backend.test/storage/images/' . $event->image;
+        $event->start = Carbon::parse($event->start)->isoFormat('dddd, D [de] MMMM [de] YYYY, h:mm A');
+        $event->end = Carbon::parse($event->end)->isoFormat('dddd, D [de] MMMM [de] YYYY, h:mm A');
+
+        return view('events.show', compact('event'));
     }
 
     /**
@@ -91,6 +104,12 @@ class EventsController extends Controller
     public function edit(string $id)
     {
         //
+        $event = Event::find($id);
+        $tags = Tag::all();
+        $categories = Category::all();
+        $courses = Course::all();
+    
+    return view('events.edit', compact('event', 'tags', 'categories', 'courses'));
     }
 
     /**
@@ -99,6 +118,27 @@ class EventsController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        //
+        $events = Event::find($id);
+        $start = $request->start_date . " " . $request->start_hour;
+        $end = $request->end_date . " " . $request->end_hour;
+        $file = $request->file('image');
+        $file_name = 'event_' . time() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('public/images', $file_name);
+        $events -> update([
+            'courses_id' => $request->course,
+            'categories_id' => $request->category,
+            'tags_id' => $request->tag,
+            'users_id' => $request->user,
+            'title' => $request->title,
+            'start' => $start,
+            'end' => $end,
+            'status' => $request->status,
+            'description' => $request->description,
+            'image' => $file_name,
+            'percentage' => 15,
+        ]);
+        return redirect()->route('events.index');
     }
 
     /**
@@ -107,5 +147,8 @@ class EventsController extends Controller
     public function destroy(string $id)
     {
         //
+        $events = Event::find($id);
+        $events->delete();
+        return redirect()->route('events.index');
     }
 }
