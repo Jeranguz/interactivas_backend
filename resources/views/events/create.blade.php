@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="flex justify-center">
+    <button onclick="location.href='{{ url()->previous() }}'" class="top-0 px-8 py-4 bg-blue-700 rounded-xl text-2xl text-white absolute right-0">Volver</button>
     <div class="w-[40%]">
         <h1 class="font-bold text-6xl text-center">Crear evento</h1>
 
