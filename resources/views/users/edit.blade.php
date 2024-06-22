@@ -54,6 +54,7 @@
                 <div>
                     <label for="user_types_id">Tipo de usuario</label>
                     <select class="w-full p-2 my-2 border border-gray-300 rounded" name="user_types_id" value="{{$user->name}}">
+
                         @foreach($types as $type)
                         @if ($type->id == $user->user_types_id)
                         <option value="{{$type->id}}" selected>{{$type->type}}</option>
@@ -66,7 +67,16 @@
             </div>
             <img id="preview" src="{{ asset('storage/images/users/'.$user->profile_picture) }}" alt="user_picture">
             <input type="hidden" name="old_image" value="{{ $user->profile_picture }}">
-            <input type="file" accept=".jpg, .png" name="profile_picture" id="image"/>
+            <input type="file" accept=".jpg, .png" name="profile_picture" id="image" />
+            @php
+            $enrolledCourseIds = $user->courses->pluck('id')->toArray();
+            @endphp
+            @foreach($courses as $course)
+            <div>
+                <input type="checkbox" id="course{{ $course->id }}" name="courses[]" value="{{ $course->id }}" {{ in_array($course->id, $enrolledCourseIds) ? 'checked' : '' }}>
+                <label for="course{{ $course->id }}">{{ $course->name }}</label>
+            </div>
+            @endforeach
             <button type="submit" class="bg-purple-600 text-white py-4 rounded-md mt-4 w-full">Actualizar datos</button>
         </form>
     </div>

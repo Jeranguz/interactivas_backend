@@ -28,6 +28,9 @@ Route::get('/categories/all', [CategoryController::class, 'index']);
 Route::get('/courses/all', [CourseController::class, 'allCourses']);
 
 
-Route::get('/events/detail/{id}', [EventsController::class, 'show']);
+Route::get('/events/detail/{id}', [EventsController::class, 'apiEvent']);
 
-Route::post('/events/add', [EventsController::class, 'store']);
+Route::get('/events/userevents/{user_id}/', [EventsController::class, 'userEvents']);
+
+Route::post('/events/add', [EventsController::class, 'storeApi']);
+

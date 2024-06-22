@@ -72,6 +72,12 @@
             <input type="file" accept=".jpg, .png" name="profile_picture" id="image" />
             <img id="preview" src="{{ url('storage/images/placeholder-image.webp') }}" alt="user" class="max-h-60">
 
+            @foreach($courses as $course)
+            <div>
+                <input type="checkbox" id="course{{ $course->id }}" name="courses[]" value="{{ $course->id }}">
+                <label for="course{{ $course->id }}">{{ $course->name }}</label>
+            </div>
+            @endforeach
 
 
             <button type="submit" class="bg-purple-600 text-white py-4 rounded-md mt-4 w-full">Guardar</button>

@@ -31,6 +31,12 @@ class User extends Authenticatable
         'profile_picture'
     ];
 
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'user_courses', 'users_id', 'courses_id');
+    }
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

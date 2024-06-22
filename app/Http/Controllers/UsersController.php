@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserType;
+use App\Models\Course;
+use App\Models\UserCourse;
 use Illuminate\Support\Facades\File;
 
 
@@ -34,8 +36,9 @@ class UsersController extends Controller
     public function create()
     {
         //
+        $courses = Course::all();
         $types = UserType::all();
-        return view('users.create', compact('types'));
+        return view('users.create', compact('types', 'courses'));
     }
 
     /**
@@ -45,14 +48,14 @@ class UsersController extends Controller
     {
         //
         $file = $request->file('profile_picture');
-        if($file){
+        if ($file) {
             $file_name = 'user_' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('public/images/users', $file_name);
-        }else{
-            $file_name='placeholder-image.webp';
+        } else {
+            $file_name = 'placeholder-image.webp';
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
             'username' => $request->username,
@@ -65,6 +68,16 @@ class UsersController extends Controller
             'user_types_id' => $request->user_types_id,
             'profile_picture' => $file_name
         ]);
+        $user->courses()->attach($request->courses);
+        // $coursesIds = $request->courses;
+        // $userId = $user->id;
+        // foreach ($coursesIds as $courseId){
+        //     UserCourse::create([
+        //         'users_id' => $userId,
+        //         'courses_id' => $courseId
+        //     ]);
+        // }
+
         return redirect()->route('users.index');
         // return $request;
     }
@@ -91,6 +104,23 @@ class UsersController extends Controller
             ->join('user_types', 'users.user_types_id', '=', 'user_types.id')
             ->where('users.id', $id)
             ->first();
+
+        $user_courses = User::select(
+            'courses.id as id',
+            'courses.name as name'
+        )
+            ->join('user_courses', 'users.id', '=', 'user_courses.users_id')
+            ->join('courses', 'user_courses.courses_id', '=', 'courses.id')
+            ->where('users.id', $id)
+            ->get();
+        // $formated = [];
+        // foreach ($user_courses as $courses) {
+        //     $formated[] = [
+        //         $courses->id,
+        //         $courses->name,
+        //     ];
+        // }
+        $user->courses = $user_courses;
         return view('users.show', compact('user'));
         // return $user;
     }
@@ -102,9 +132,29 @@ class UsersController extends Controller
     {
         //
         $user = User::find($id);
-        $user->password = 
+        $courses = Course::all();
         $types = UserType::all();
-        return view('users.edit', compact('user', 'types'));
+        $user_courses = User::select(
+            'courses.id as id',
+            'courses.name as name'
+        )
+            ->join('user_courses', 'users.id', '=', 'user_courses.users_id')
+            ->join('courses', 'user_courses.courses_id', '=', 'courses.id')
+            ->where('users.id', $id)
+            ->get();
+
+        // $formated_courses = [];
+
+        // foreach ($courses as $course){
+        //     $formated_courses[] = [
+        //         'id'=> $course->id,
+        //         'name'=> $course->name,
+        //     ];
+        // }
+        $user->courses = $user_courses;
+
+        return view('users.edit', compact('user', 'types', 'courses'));
+        // return $user->courses;
     }
 
     /**
@@ -119,18 +169,18 @@ class UsersController extends Controller
 
         if ($user) {
             if ($file != null) {
-                $old_file = 'storage/images/users/'.$request->old_image;
+                $old_file = 'storage/images/users/' . $request->old_image;
                 if (File::exists($old_file)) {
                     File::delete($old_file);
                 }
                 $file_name = 'user_' . time() . '.' . $file->getClientOriginalExtension();
                 $path = $file->storeAs('public/images/users', $file_name);
-            }else{
+            } else {
                 $file_name = $request->old_image;
             }
-            
-            
-            
+
+
+
             $user->update([
                 'name' => $request->name,
                 'lastname' => $request->lastname,
@@ -142,20 +192,21 @@ class UsersController extends Controller
                 'semanal_activity' => $request->semanal_activity,
                 'nacionality' => $request->nacionality,
                 'user_types_id' => $request->user_types_id,
-                'profile_picture'=>$file_name
+                'profile_picture' => $file_name
             ]);
+            $user->courses()->sync($request->courses);
             return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
         }
-        }
-        
-        /**
-         * Remove the specified resource from storage.
+    }
+
+    /**
+     * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         //
         $user = User::find($id);
-        $user -> delete();
+        $user->delete();
         return redirect()->route('users.index');
     }
 }
