@@ -19,6 +19,30 @@ class EventsController extends Controller
         //
         $events = Event::all();
         return view('events.index', compact('events'));
+        /*$events = Event::select(
+            'courses.name as course',
+            'categories.name as category',
+            'tags.name as tag',
+            'events.title',
+            'events.start',
+            'events.end',
+            'events.status',
+            'events.description',
+            'events.image',
+            'events.percentage',
+        )
+        ->join('courses', 'events.courses_id', '=', 'courses.id')
+        ->join('categories', 'events.categories_id', '=', 'categories.id')
+        ->join('tags', 'events.tags_id', '=', 'tags.id')
+        ->where('events.status', 1)
+        ->orderBy('events.start', 'asc');
+        //->get();
+
+        $categories = Category::all();
+        $events = Event::all();
+        
+        $total = count(Event::all()->where('events.status', 1));
+        return view('events.index', compact('events', 'total', 'categories'));*/
     }
 
     public function allEvents()
@@ -39,6 +63,56 @@ class EventsController extends Controller
         $courses = Course::all();
         return view('events.create', compact('tags', 'categories', 'courses'));
     }
+
+    /*public function search(Request $request)
+    {
+        
+
+        if($request->category == 0){
+            $events = Event::select(
+                'courses.name as course',
+                'categories.name as category',
+                'tags.name as tag',
+                'events.title',
+                'events.start',
+                'events.end',
+                'events.status',
+                'events.description',
+                'events.image',
+                'events.percentage',
+            )
+            ->join('courses', 'events.courses_id', '=', 'courses.id')
+            ->join('categories', 'events.categories_id', '=', 'categories.id')
+            ->join('tags', 'events.tags_id', '=', 'tags.id')
+            ->whereAny(['events.title'], 'LIKE', '%' . $request->event . '%')
+            ->whereBetween('events.start', [$request->from_datetime, $request->to_datetime])
+            ->where('events.status', 1)
+            ->orderBy('events.start', 'asc');
+        }else{
+            $events = Event::select(
+                'courses.name as course',
+                'categories.name as category',
+                'tags.name as tag',
+                'events.title',
+                'events.start',
+                'events.end',
+                'events.status',
+                'events.description',
+                'events.image',
+                'events.percentage',
+            )
+            ->join('courses', 'events.courses_id', '=', 'courses.id')
+            ->join('categories', 'events.categories_id', '=', 'categories.id')
+            ->join('tags', 'events.tags_id', '=', 'tags.id')
+            ->whereAny(['events.title'], 'LIKE', '%' . $request->event . '%')
+            ->whereBetween('events.start', [$request->from_datetime, $request->to_datetime])
+            ->where('events.status', 1)
+            ->orderBy('events.start', 'asc');
+        }
+        
+        $total = count($events);
+        return view('events.search', compact('events', 'total'));
+    }*/
 
     /**
      * Store a newly created resource in storage.
@@ -90,6 +164,7 @@ class EventsController extends Controller
             ->join('categories', 'events.categories_id', '=', 'categories.id')
             ->join('tags', 'events.tags_id', '=', 'tags.id')
             ->where('events.id', $id)
+            //->get();
             ->firstOrFail(); // Aquí usamos firstOrFail() en lugar de get()
 
         $event->image = 'http://interactivas_backend.test/storage/images/' . $event->image;
