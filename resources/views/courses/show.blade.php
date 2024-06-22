@@ -1,14 +1,13 @@
 @extends('base')
 
 @section('content')
-<div class="flex justify-center relative">
-    <button onclick="location.href='{{ url()->previous() }}'" class="top-0 px-8 py-4 bg-blue-700 rounded-xl text-2xl text-white absolute right-0">Volver</button>
-    <div class="w-[40%]">
+<div class="flex justify-center pt-10 relative">
+    <button onclick="location.href='{{ url()->previous() }}'" class="absolute top-4 right-4 px-6 py-3 bg-blue-600 rounded-xl text-lg text-white shadow-md hover:bg-blue-700 transition duration-300">Volver</button>
+    <div class="w-full md:w-3/4 lg:w-1/2 bg-white p-8 rounded-lg shadow-lg">
 
-        <button onclick="location.href='{{ url()->previous() }}'" class="top-0 px-8 py-4 bg-blue-700 rounded-xl text-2xl text-white absolute right-0">Volver</button>
-        <h2 class="text-center text-4xl font-bold">{{$course->name}}</h2>
-        <p  class="text-center text-2xl">{{$course->description}}</p>
+        <h2 class="text-center text-4xl font-bold mb-8">{{$course->name}}</h2>
+        <p class="text-center text-2xl text-gray-700 mb-4">{{$course->description}}</p>
+
     </div>
 </div>
-
 @endsection

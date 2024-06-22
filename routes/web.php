@@ -27,3 +27,4 @@ Route::resource('events', EventsController::class);
 Route::resource('courses', CourseController::class);
 Route::resource('tags', TagController::class);
 Route::resource('users', UsersController::class);
+//Route::get('/events/search/event', [EventsController::class, 'search'])->name('events.search');
