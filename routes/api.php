@@ -40,7 +40,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:3,10'); // 3 solicitudes cada 10 minutos
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:3,10'); // 3 solicitudes cada 10 minutos
 
-    Route::middleware(['auth:sanctum', 'throttle:5,1'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/resolvetoken', [AuthController::class, 'userToken']);
     });
 });

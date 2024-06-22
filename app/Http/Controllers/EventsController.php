@@ -296,6 +296,7 @@ class EventsController extends Controller
         Carbon::setlocale('es');
         //
         $event = Event::select(
+            'events.id',
             'courses.name as course',
             'categories.name as category',
             'tags.name as tag',

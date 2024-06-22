@@ -16,8 +16,10 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -26,13 +28,18 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'lastname' => $request->lastname,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'user_types_id' => 3
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['message' => 'User registered successfully', 'token' => $token], 201);
+        return response()->json([
+            'success' => true,
+            'token' => $token]);
     }
 
     public function login(Request $request)
@@ -49,12 +56,14 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid email or password'], 401);
+            return response()->json(['errors' => 'Invalid email or password'], 401);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json([
+            'success' => true,
+            'token' => $token]);
     }
 
     public function forgotPassword(Request $request)
@@ -123,5 +132,13 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out successfully'], 200);
+    }
+
+    public function userToken(Request $request){
+
+        $user = $request->user();
+
+        return response()->json(
+            $user);
     }
 }
