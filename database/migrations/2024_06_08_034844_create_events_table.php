@@ -16,14 +16,14 @@ return new class extends Migration
             $table->foreignId('courses_id')->constrained();
             $table->foreignId('categories_id')->constrained();
             $table->foreignId('tags_id')->constrained();
-            $table->foreignId('users_id')->constrained();
+            $table->foreignId('users_id')->nullable()->constrained();
             $table->string('title');
             $table->dateTime('start');
             $table->dateTime('end');
             $table->boolean('status');
             $table->text('description');
             $table->string('image');
-            $table->decimal('percentage');
+            $table->decimal('percentage')->nullable();
             $table->timestamps();
 
         });

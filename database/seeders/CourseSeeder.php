@@ -21,5 +21,9 @@ class CourseSeeder extends Seeder
         Course::create(['name' => 'LECTURA EN INGLÉS PARA INFORMÁTICA', 'description' => 'Curso de ingles']);
         Course::create(['name' => 'INGENIERÍA DE APLICACIONES INTERACTIVAS', 'description' => 'Curso de organizacion de proyectos']);
         Course::create(['name' => 'DISEÑO DE SITIOS WEB', 'description' => 'Curso de diseño']);
+        Course::create(['name' => 'PROGRAMACION', 'description' => 'Curso de programacion']);
+        Course::create(['name' => 'UX/UI', 'description' => 'Curso de ux/ui']);
+        Course::create(['name' => 'BASES DE DATOS', 'description' => 'Curso de bases de datos']);
+        Course::create(['name' => 'DIBUJO', 'description' => 'Curso de dibujo']);
     }
 }

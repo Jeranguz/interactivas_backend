@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
             CourseSeeder::class,
             TagSeeder::class,
             UserTypeSeeder::class,
-            
+            EventSeeder::class,
+            UserSeeder::class,
+            UserCourseSeeder::class
         ]);
     }
 }
