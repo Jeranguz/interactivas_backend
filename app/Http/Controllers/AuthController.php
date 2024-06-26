@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Notifications\ResetPasswordCode;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\Course;
 
 class AuthController extends Controller
 {
@@ -32,7 +33,8 @@ class AuthController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'user_types_id' => 3
+            'user_types_id' => 3,
+            'profile_picture' => 'placeholder-image.webp'
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -137,6 +139,17 @@ class AuthController extends Controller
     public function userToken(Request $request){
 
         $user = $request->user();
+
+        $user_courses = User::select(
+            'courses.id as id',
+            'courses.name as name'
+        )
+            ->join('user_courses', 'users.id', '=', 'user_courses.users_id')
+            ->join('courses', 'user_courses.courses_id', '=', 'courses.id')
+            ->where('users.id', $user->id)
+            ->get();
+
+        $user->courses = $user_courses;
 
         return response()->json(
             $user);
