@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::get('/events/detail/{id}', [EventsController::class, 'apiEvent']);
 
 Route::get('/events/userevents/{user_id}/', [EventsController::class, 'userEvents']);
 Route::post('/events/add', [EventsController::class, 'storeApi']);
+
+Route::post('/users/update', [UsersController::class, 'updateUserApi']);
 
 
 

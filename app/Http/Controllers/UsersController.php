@@ -8,6 +8,9 @@ use App\Models\UserType;
 use App\Models\Course;
 use App\Models\UserCourse;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 
 
 class UsersController extends Controller
@@ -170,7 +173,7 @@ class UsersController extends Controller
         if ($user) {
             if ($file != null) {
                 $old_file = 'storage/images/users/' . $request->old_image;
-                if (File::exists($old_file)) {
+                if (File::exists($old_file) && $old_file != 'storage/images/users/placeholder-image.webp') {
                     File::delete($old_file);
                 }
                 $file_name = 'user_' . time() . '.' . $file->getClientOriginalExtension();
@@ -198,6 +201,60 @@ class UsersController extends Controller
             return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
         }
     }
+
+    public function updateUserApi(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users')->ignore($request->id),
+            ],
+            'nacionality' => 'string',
+            'age' => 'numeric|gt:0',
+            'hours_sleep' => 'numeric',
+            'semanal_activity' => 'numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        //
+
+        $file = $request->file('profile_picture');
+        $user = User::find($request->id);
+
+        if ($user) {
+            if ($file != null) {
+                $old_file = 'storage/images/users/' . $request->old_image;
+                if (File::exists($old_file) && $old_file != 'storage/images/users/placeholder-image.webp') {
+                    File::delete($old_file);
+                }
+                $file_name = 'user_' . time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('public/images/users', $file_name);
+            } else {
+                $file_name = $request->old_image;
+            }
+        }
+        $user->update([
+            'name' => $request->name,
+            'lastname' => $request->lastname,
+            'username' => $request->username,
+            'email' => $request->email,
+            'age' => $request->age,
+            'hours_sleep' => $request->hours_sleep,
+            'semanal_activity' => $request->semanal_activity,
+            'nacionality' => $request->nacionality,
+            'profile_picture' => $file_name
+        ]);
+
+        return response()->json(['success' => 'Perfil actualizado']);
+            
+    }
+    
 
     /**
      * Remove the specified resource from storage.

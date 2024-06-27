@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
 
 class AdminController extends Controller
 {
@@ -17,6 +20,11 @@ class AdminController extends Controller
     {
         //
         return view('admin.index');
+    }
+    public function login()
+    {
+        //
+        return view('admin.login');
     }
 
     /**
@@ -69,5 +77,47 @@ class AdminController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function check(Request $request)
+    {
+        // if (!Auth::attempt($request->only('email', 'password'))) {
+        //     return redirect()->route('admin.login')->with('error', 'Wrong mail or password');
+        // }
+
+        // $user = User::where('email', $request['email'])->firstOrFail();
+
+        // if ($user->user_types_id !== 1) {
+        //     return redirect()->route('admin.login')->with('error', 'Unauthorized');
+        // } else {
+        //     $token = $user->createToken('auth_token')->plainTextToken;
+        //     session()->put('auth_token', $token);
+        // }
+        // return redirect()->route('admin.index');
+        if(!Auth::attempt($request->only('email', 'password')))
+        {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $user = User::where('email', $request['email'])->firstOrFail();
+        if ($user->user_types_id !== 1) {
+            Auth::logout();
+            return redirect()->route('admin.login')->with('error', 'Unauthorized');
+        }
+        
+        session_start();
+
+        return redirect()->route('events.index');
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+        Auth::logout();
+        //destroy session and variables
+        session_start();
+        session_destroy();
+        //return response()->json(['message' => 'Logged out successfully']);
+        return redirect()->route('admin.login');
     }
 }

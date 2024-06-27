@@ -70,6 +70,7 @@
             </div>
 
             <input type="hidden" name="user" value="{{ $event->users_id }}" />
+            <input type="hidden" name="old_image" value="{{ $event->image }}" />
             <input type="hidden" name="status" value="{{ $event->status }}" />
 
             <button class="bg-purple-600 text-white py-3 rounded-md mt-4 w-full hover:bg-purple-700" type="submit">Guardar</button>

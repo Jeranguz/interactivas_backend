@@ -9,6 +9,8 @@ use App\Models\Course;
 use App\Models\Category;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+
 
 class EventsController extends Controller
 {
@@ -261,6 +263,18 @@ class EventsController extends Controller
         $start = $request->start_date . " " . $request->start_hour;
         $end = $request->end_date . " " . $request->end_hour;
         $file = $request->file('image');
+        if ($events) {
+            if ($file != null) {
+                $old_file = 'storage/images/' . $request->old_image;
+                if (File::exists($old_file) && $old_file != 'storage/images/placeholder-image.webp') {
+                    File::delete($old_file);
+                }
+                $file_name = 'user_' . time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('public/images/users', $file_name);
+            } else {
+                $file_name = $request->old_image;
+            }
+        }
         $file_name = 'event_' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('public/images', $file_name);
         $events->update([

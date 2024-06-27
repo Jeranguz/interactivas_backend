@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="flex justify-center relative pt-4">
-    <button onclick="location.href='{{ url()->previous() }}'" class="px-8 py-4 bg-gray-900 rounded-xl text-2xl text-white fixed top-4 right-4 hover:bg-gray-600 transition duration-300">Volver</button>
+    <button onclick="location.href='{{ url()->previous() }}'" class="px-8 py-4 bg-gray-900 rounded-xl text-2xl text-white fixed top-15 right-4 hover:bg-gray-600 transition duration-300">Volver</button>
     <div class="w-[80%] mx-auto mt-10 px-4">
         @if ($message = Session::get('success'))
         <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400">
