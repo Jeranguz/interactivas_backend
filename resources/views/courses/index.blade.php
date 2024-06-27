@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto py-12">
-    <button onclick="location.href='{{ url()->previous() }}'" class="px-8 py-4 bg-gray-900 rounded-xl text-2xl text-white fixed top-4 right-4 hover:bg-gray-600 transition duration-300">Volver</button>
+    <a class="px-8 py-4 bg-gray-900 rounded-xl text-2xl text-white fixed top-4 right-4 hover:bg-gray-600 transition duration-300" href="{{ route('admin.index') }}">Volver</a>
     <div class="w-full md:w-3/5 mx-auto">
         <h1 class="font-bold text-6xl text-center mb-8">Lista de Cursos</h1>
         <div class="flex justify-end mb-6">

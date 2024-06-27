@@ -2,10 +2,12 @@
 
 @section('content')
 <div class="w-[60%] mx-auto mt-10 px-4">
-    <button onclick="location.href='{{ url()->previous() }}'" class="px-8 py-4 bg-gray-900 rounded-xl text-2xl text-white fixed top-13 right-4 hover:bg-gray-600 transition duration-300">Volver</button>
+    <a class="px-8 py-4 bg-gray-900 rounded-xl text-2xl text-white fixed top-4 right-4 hover:bg-gray-600 transition duration-300" href="{{ route('admin.index') }}">Volver</a>
     <h1 class="text-4xl font-bold text-center mb-8">Lista de Eventos</h1>
-    <div class="flex justify-end mb-6">
+    <div class="flex justify-end mb-6 gap-4">
         <a href="{{ route('events.create') }}" class="px-6 py-3 bg-blue-900 text-white rounded-md shadow-md hover:bg-blue-800 transition duration-300">Crear evento</a>
+        <a href="{{ route('events.index', ['status' => 'finalizados']) }}" class="px-6 py-3 bg-red-950 text-white rounded-md shadow-md hover:bg-red-900 transition duration-300">Eventos Finalizados</a>
+        <a href="{{ route('events.index') }}" class="px-6 py-3 bg-gray-600 text-white rounded-md shadow-md hover:bg-gray-400 transition duration-300">Eventos en Curso</a>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-lg">
         <table class="w-full table-auto">
