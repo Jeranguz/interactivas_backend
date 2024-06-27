@@ -213,6 +213,12 @@ class UsersController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore($request->id),
             ],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($request->id),
+            ],
             'nacionality' => 'string',
             'age' => 'numeric|gt:0',
             'hours_sleep' => 'numeric',
