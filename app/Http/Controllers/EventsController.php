@@ -15,11 +15,11 @@ class EventsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    //public function index()
+    //{
         //
-        $events = Event::all();
-        return view('events.index', compact('events'));
+        //$events = Event::all();
+        //return view('events.index', compact('events'));
         /*$events = Event::select(
             'courses.name as course',
             'categories.name as category',
@@ -44,6 +44,19 @@ class EventsController extends Controller
         
         $total = count(Event::all()->where('events.status', 1));
         return view('events.index', compact('events', 'total', 'categories'));*/
+    //}
+
+    public function index(Request $request)
+    {
+        $query = Event::query();
+
+        if ($request->has('status') && $request->status == 'finalizados') {
+            $events = $query->where('end', '<', Carbon::now())->get();
+        } else {
+            $events = $query->where('end', '>=', Carbon::now())->get();
+        }
+
+        return view('events.index', compact('events'));
     }
 
     public function allEvents()
