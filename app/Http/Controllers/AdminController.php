@@ -107,7 +107,7 @@ class AdminController extends Controller
         
         session_start();
 
-        return redirect()->route('events.index');
+        return redirect()->route('admin.index');
     }
 
     public function logout()

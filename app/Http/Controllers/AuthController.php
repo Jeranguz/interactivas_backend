@@ -10,6 +10,7 @@ use App\Notifications\ResetPasswordCode;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use Illuminate\Support\Facades\Redis;
 
 class AuthController extends Controller
 {
@@ -47,8 +48,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
-            'password' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -153,5 +154,16 @@ class AuthController extends Controller
 
         return response()->json(
             $user);
+    }
+
+    public function changePassword(Request $request){
+        
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+        $user->password = Hash::make($request->password);
+        $user->save();
+        }
+        return response()->json([
+            'success' => true]);
     }
 }
