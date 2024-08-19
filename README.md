@@ -64,3 +64,19 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+Instalacion 
+
+Hacer clone del Proyecto directamente en la carpeta www: https://github.com/Jeranguz/interactivas_backend.git
+
+Instalar los node_modules
+
+Instalar composer
+
+Crear un nuevo archivo .env, en el espacio de la base de datos asegurarse de poner 'interactivasbackend'
+
+Crear una base de datos en Heidi que le llame "interactivasbackend"
+
+Ejecutar las migraciones y seeders
